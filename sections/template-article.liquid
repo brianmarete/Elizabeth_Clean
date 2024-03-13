@@ -1,3 +1,5 @@
+{% assign placeholder_image = 'lifestyle-2' %}
+
 <article class="py-8" itemscope itemtype="http://schema.org/BlogPosting">
   {% for block in section.blocks %}
     {% case block.type %}
@@ -37,7 +39,6 @@
           {% if article.image != blank %}
             <img class="w-full h-80 md:h-96 object-cover object-center" src="{{ article.image | image_url: width: 1000, crop: top }}" alt="{{ article.image.alt }}" width="" height="">
           {% else %}
-            {% assign placeholder_image = 'lifestyle-2' %}
             {{ placeholder_image | placeholder_svg_tag: 'w-full h-80 md:h-96 object-cover object-center p-5' }}
           {% endif %}
         </div>
