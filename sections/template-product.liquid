@@ -44,7 +44,7 @@
       </div>
     </div>
     <div class="product--info sticky top-5 p-2">
-      {% form 'product', product %}
+      {% form 'product', product, id: 'product-form', novalidate: 'novalidate' %}
         <input type="hidden" name="id" value="{{ selected_variant.id }}">
 
         {% for block in section.blocks %}
@@ -58,7 +58,7 @@
                 <h1 class="my-3 text-3xl text-gray-900">{{ product.title }}</h1>
               </div>
             {% when 'price' %}
-              <div class="my-3">
+              <div class="my-3" id="price-{{ section.id }}">
                 <span class="text-xs text-gray-500 line-through">{{ selected_variant.compare_at_price | money }}</span>
                 <span class="text-lg text-gray-900">{{ selected_variant.price | money }}</span>
 
@@ -69,7 +69,7 @@
             {% when 'variant_selector' %}
               <div class="my-3">
                 {% unless product.has_only_default_variant %}
-                  <div data-url="{{ product.url }}" data-section="{{ section.id }}">
+                  <variant-selector data-url="{{ product.url }}" data-section="{{ section.id }}">
                     {% for option in product.options_with_values %}
                       <label for="Option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
                       <div class="my-2">
@@ -90,8 +90,12 @@
                           {% endfor %}
                         </select>
                       </div>
+
+                      <script type="application/json">
+                        {{ product.variants | json }}
+                      </script>
                     {% endfor %}
-                  </div>
+                  </variant-selector>
                 {% endunless %}
               </div>
             {% when 'quantity' %}
@@ -129,6 +133,93 @@
     </div>
   </div>
 </div>
+
+<script>
+  class VariantSelector extends HTMLElement {
+    constructor() {
+      super();
+      // this.productUrl = `${window.location.origin}${this.dataset.url}`;
+      this.addEventListener("change", this.onVariantChange);
+    }
+
+    onVariantChange() {
+      this.getSelectedVariant();
+
+      if (this.currentVariant) {
+        this.updateURL();
+        this.updateFormID();
+        this.updatePrice();
+        this.updateButton();
+      }
+    }
+
+    get options() {
+      return Array.from(this.querySelectorAll('select'), (select) => select.value);
+    }
+
+    getVariantJSON() {
+      this.variantData = this.variantData || JSON.parse(this.querySelector('[type="application/json"]').textContent);
+      return this.variantData;
+    }
+
+    getSelectedVariant() {
+      this.currentVariant = this.getVariantJSON().find(
+        (variant) => {
+          const findings = !variant.options.map(
+            (option, index) => {
+              return this.options[index] === option;
+            }
+          ).includes(false);
+
+          if (findings) {
+            return variant
+          }
+        }
+      );
+    }
+
+    updateURL() {
+      if (!this.currentVariant) return;
+      // const newUrl = new URL(this.productUrl);
+      // newUrl.searchParams.set('variant', this.currentVariant.id);
+      // window.location = newUrl;
+      window.history.replaceState({}, '', `${this.dataset.url}?variant=${this.currentVariant.id}`);
+    }
+
+    updateFormID(){
+      const formInput = document.querySelector('#product-form input[name="id"]');
+      formInput.value = this.currentVariant.id;
+    }
+
+    updatePrice() {
+      fetch(`${this.dataset.url}?variant=${this.currentVariant.id}&section_id=${this.dataset.section}`)
+        .then((response) => response.text())
+        .then((responseText) => {
+          const id = `price-${this.dataset.section}`;
+          const html = new DOMParser().parseFromString(responseText, 'text/html');
+
+          const oldPrice = document.getElementById(id);
+          const newPrice = html.getElementById(id);
+
+          if(oldPrice && newPrice) oldPrice.innerHTML = newPrice.innerHTML;
+        })
+    }
+
+    updateButton(){
+      const button = document.querySelector('button[name="add"]')
+
+      if (this.currentVariant.available) {
+        button.removeAttribute("disabled")
+        button.innerHTML = "Add to cart"
+      } else {
+        button.setAttribute("disabled", "disabled")
+        button.innerHTML = "Sold out"
+      }
+    }
+
+  }
+  customElements.define('variant-selector', VariantSelector);
+</script>
 
 <script>
   const swiper = new Swiper('.swiper', {
