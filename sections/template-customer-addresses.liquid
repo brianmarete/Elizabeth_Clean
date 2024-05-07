@@ -12,7 +12,7 @@
         <button x-on:click="show_new_address_modal = false" class="text-gray-500">{% render 'icon-close' %}</button>
       </div>
 
-      {% render 'address-form', address: customer.new_address  %}
+      {% render 'address-form', address: customer.new_address %}
     </div>
   </div>
   <div>
@@ -40,7 +40,7 @@
                 </button>
               </div>
 
-              <form action="{{ address.url}}" method="post">
+              <form action="{{ address.url }}" method="post">
                 <input type="hidden" name="_method" value="delete">
               </form>
             </div>
@@ -52,7 +52,7 @@
                   <button x-on:click="address_{{ address.id }} = false" class="text-gray-500">{% render 'icon-close' %}</button>
                 </div>
 
-                {% render 'address-form', address: address, mode: 'edit'  %}
+                {% render 'address-form', address: address, mode: 'edit' %}
               </div>
             </div>
           </div>

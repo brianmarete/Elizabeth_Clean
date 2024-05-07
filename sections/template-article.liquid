@@ -37,7 +37,7 @@
       {% when "featured_image" %}
         <div itemprop="image" class="my-4 max-w-7xl bg-blue-100 rounded-lg mx-2 md:mx-auto overflow-hidden">
           {% if article.image != blank %}
-            <img class="w-full h-80 md:h-96 object-cover object-center" src="{{ article.image | image_url: width: 1000, crop: top }}" alt="{{ article.image.alt }}" width="" height="">
+            <img class="w-full h-80 md:h-96 object-cover object-center" src="{{ article.image | image_url: width: 1000 }}" alt="{{ article.image.alt }}" width="" height="" loading="lazy">
           {% else %}
             {{ placeholder_image | placeholder_svg_tag: 'w-full h-80 md:h-96 object-cover object-center p-5' }}
           {% endif %}
@@ -55,8 +55,8 @@
         {% paginate article.comments by 5 %}
           {% for comment in article.comments %}
             <div class="flex-1 border my-4 px-4 py-2 sm:px-6 sm:py-4 leading-relaxed">
-              <span class="comment-author">{{comment.author}}</span> <span class="text-xs text-gray-400">{{ comment.created_at | date: format: 'default' }}</span>
-              <p class="text-sm">{{comment.content}}</p>
+              <span class="comment-author">{{ comment.author }}</span> <span class="text-xs text-gray-400">{{ comment.created_at | date: format: 'default' }}</span>
+              <p class="text-sm">{{ comment.content }}</p>
             </div>
           {% endfor %}
 
@@ -86,7 +86,7 @@
             <ul class="px-4 mb-3 ml-7 list-decimal">
               {% for error in form.errors %}
                 <li>
-                  <span>{{form.errors.messages[error]}}</span>
+                  <span>{{ form.errors.messages[error] }}</span>
                 </li>
               {% endfor %}
             </ul>
@@ -147,13 +147,13 @@
     "@context": "http://schema.org",
     "@type": "BlogPosting",
     "headline": {{ article.title | json }},
-    "articleBody": {{ article.content | strip_html | json}},
+    "articleBody": {{ article.content | strip_html | json }},
     {% if article.excerpt != blank %}
       "description": {{ article.excerpt | strip_html | json }},
     {% endif %}
     {% if article.image %}
       "image": [
-        {{ article.image | image_url: width: 1000 | prepend: "https:" | json  }}
+        {{ article.image | image_url: width: 1000 | prepend: "https:" | json }}
       ],
     {% endif %}
     "datePublished": {{ article.published_at | date: format: "default" | json }},
@@ -170,48 +170,48 @@
 </script>
 
 {% schema %}
-  {
-    "name": "Template Article",
-    "settings": [
-      {
-        "type": "checkbox",
-        "id": "enable_author",
-        "default": true,
-        "label": "Display Author Name"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_published_date",
-        "default": true,
-        "label": "Display Date Published"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "article_title",
-        "name": "Title",
-        "limit": 1
-      },
-      {
-        "type": "article_author",
-        "name": "Author",
-        "limit": 1
-      },
-      {
-        "type": "article_published_date",
-        "name": "Date published",
-        "limit": 1
-      },
-      {
-        "type": "featured_image",
-        "name": "Thumbnail",
-        "limit": 1
-      },
-      {
-        "type": "article_content",
-        "name": "Content",
-        "limit": 1
-      }
-    ]
-  }
+{
+  "name": "Template Article",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_author",
+      "default": true,
+      "label": "Display Author Name"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_published_date",
+      "default": true,
+      "label": "Display Date Published"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "article_title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "article_author",
+      "name": "Author",
+      "limit": 1
+    },
+    {
+      "type": "article_published_date",
+      "name": "Date published",
+      "limit": 1
+    },
+    {
+      "type": "featured_image",
+      "name": "Thumbnail",
+      "limit": 1
+    },
+    {
+      "type": "article_content",
+      "name": "Content",
+      "limit": 1
+    }
+  ]
+}
 {% endschema %}

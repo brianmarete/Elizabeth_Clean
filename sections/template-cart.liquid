@@ -3,7 +3,7 @@
     <div class="max-w-6xl flex flex-col my-10 mx-auto">
       <div class="flex item-end justify-between my-5">
         <h1 class="text-3xl">Your cart</h1>
-        <a href="{{routes.all_products_collection_url}}" class="text-blue-600 hover:text-blue-800 font-medium underline">Continue shopping</a>
+        <a href="{{ routes.all_products_collection_url }}" class="text-blue-600 hover:text-blue-800 font-medium underline">Continue shopping</a>
       </div>
     </div>
 
@@ -21,15 +21,15 @@
                 <td class="py-4 px-2 flex flex-col justify-center">
                   <a href="{{ item.url }}">
                     {% if item.image %}
-                      <img class="w-20 h-20 object-cover border" src="{{ item.image |  image_url }}" alt="{{ item.title |  escape }}" width="" height="">
+                      <img class="w-20 h-20 object-cover border" src="{{ item.image | image_url }}" alt="{{ item.title | escape }}" width="" height="" loading="lazy">
                     {% else %}
-                      {{ 'product-1' |  placeholder_svg_tag: "w-20 h-20 object-cover border" }}
+                      {{ 'product-1' | placeholder_svg_tag: "w-20 h-20 object-cover border" }}
                     {% endif %}
                   </a>
                 </td>
                 <td class="py-4 px-2 flex flex-col justify-center">
-                  <a href="{{ item.url }}" class="my-1">{{ item.product.title |  truncatewords: 5 }}</a>
-                  <span class="text-sm text-gray-500 my-1">{{item.variant.title}}</span>
+                  <a href="{{ item.url }}" class="my-1">{{ item.product.title | truncatewords: 5 }}</a>
+                  <span class="text-sm text-gray-500 my-1">{{ item.variant.title }}</span>
                   <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="text-sm font-medium text-red-500 my-1">remove</a>
                 </td>
                 <td class="py-4 px-2">
@@ -83,24 +83,24 @@
 {% endif %}
 
 {% schema %}
-  {
-    "name": "Template Cart",
-    "blocks": [
-      {
-        "type": "subtotal",
-        "name": "Subtotal",
-        "limit": 1
-      },
-      {
-        "type": "update_button",
-        "name": "Update Button",
-        "limit": 1
-      },
-      {
-        "type": "checkout_button",
-        "name": "Checkout Button",
-        "limit": 1
-      }
-    ]
-  }
+{
+  "name": "Template Cart",
+  "blocks": [
+    {
+      "type": "subtotal",
+      "name": "Subtotal",
+      "limit": 1
+    },
+    {
+      "type": "update_button",
+      "name": "Update Button",
+      "limit": 1
+    },
+    {
+      "type": "checkout_button",
+      "name": "Checkout Button",
+      "limit": 1
+    }
+  ]
+}
 {% endschema %}

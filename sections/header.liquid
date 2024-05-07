@@ -85,7 +85,7 @@
                 </div>
                 <div class="-mr-2">
                     <button type="button" class="bg-white rounded-md p-2 text-gray-500" x-on:click="mobileMenuOpen = false">
-                        {%  render "icon-close" %}
+                        {% render "icon-close" %}
                     </button>
                 </div>
             </div>
@@ -145,23 +145,23 @@
 </div>
 
 {% schema %}
-  {
-    "name": "Header",
-    "settings": [
-      {
-        "type": "text",
-        "id": "mobile_menu_title",
-        "default": "Menu",
-        "info": "This is the title for the mobile menu window",
-        "label": "Title"
-      },
-      {
-        "type": "link_list",
-        "id": "menu",
-        "default": "main-menu",
-        "info": "Menu to display",
-        "label": "Header Menu"
-      }
-    ]
-  }
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "text",
+      "id": "mobile_menu_title",
+      "default": "Menu",
+      "info": "This is the title for the mobile menu window",
+      "label": "Title"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "info": "Menu to display",
+      "label": "Header Menu"
+    }
+  ]
+}
 {% endschema %}
